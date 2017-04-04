@@ -1,0 +1,3 @@
+
+
+En esta carpeta se encuentran los swf del sitio. Es necesario aclarar que la cámara o el manejo de la cámara se hace mediante la tecnología de Flash con actionscript 3, en interacción con php.
