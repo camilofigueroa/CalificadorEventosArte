@@ -1,0 +1,3 @@
+
+
+En esta carpeta se encuentran las clases y algunos elementos importantes para la creación del swf y todo lo que requiera de actionscript.
