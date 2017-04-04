@@ -1,0 +1,3 @@
+
+
+En esta carpeta se puede encontrar el archivo Flash que permite la creación del sfw para la captura de las fotos mediante la cámara web.
