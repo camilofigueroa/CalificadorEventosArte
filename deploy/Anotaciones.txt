@@ -1,0 +1,3 @@
+
+
+En esta carpeta se encuentra todo lo que se debe publicar para poner en funcionamiento el sitio como tal.
