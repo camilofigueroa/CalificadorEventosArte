@@ -1,0 +1,2 @@
+
+En esta carpeta se deberán colocar las clases respectivas de Greensock para actionscript 3.
