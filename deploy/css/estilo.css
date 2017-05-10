@@ -1,0 +1,45 @@
+
+body
+{
+    margin: 40px;
+    font-family: Tahoma;
+}
+
+a
+{
+    font-size: 30px;
+    font-style: italic;
+}
+
+.contenedor-titulo
+{
+    font-size: 25px;
+}
+
+.entrada-texto
+{
+    font-size: 20px;
+    color: #FFA010;
+    width: 100px;
+}
+
+.contenedor-criterios-peque
+{
+    text-align: center;
+    color: #B09F80;
+    font-size: 14px;
+}
+
+.contenedor-totales
+{
+    text-align: center;
+    color: #B09F80;
+    font-size: 25px;
+    padding: 6px;
+}
+
+.contenedor-avisos-peque
+{
+    color: #76BCD4;
+    font-size: 9px;
+}
