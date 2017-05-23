@@ -2,17 +2,17 @@
 
     include_once( "config.php" );
     include_once( "nucleo.php" );
-    header('Content-Type: text/html; charset=UTF-8');
+    
     echo "<html>";
     echo "<head>";
     echo "<title>Zonal cultural Guaviare</title>";
     echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/estilo.css\" media=\"screen\" />";
-    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/bootstrap.min.css\" media=\"screen\" />";
     echo "</head>";
     
     echo "<body>";
-    echo "<div class='container-fluid'>";
-    include 'encabezado.php';
+    
+    imprimir_menu();
+    imprimir_titulo( "Zonal cultural Guaviare" );
     
     /*
         Lo que falta.
@@ -21,7 +21,7 @@
         - Campos en blanco.
         - Organizar los porcentajes.
         - Separar los enlaces.
-     
+    
     */
     
     
@@ -41,7 +41,7 @@
     //Se verifica en conjunto la categoría y el jurado.    
     if( isset( $_GET[ 'cat' ] ) && isset( $_GET[ 'jur' ] ) )
     {
-        echo "<br><a href='calificaciones.php?lista_categoria=".$_GET[ 'cat' ]."&lista_jurado=".$_GET[ 'jur' ]."'>Volver a la calificaci&oacute;n</a><br><br>";
+        echo "<br><a href='calificaciones.php?lista_categoria=".$_GET[ 'cat' ]."&lista_jurado=".$_GET[ 'jur' ]."'>Volver a la calificación</a><br><br>";
         
         //Se imprime en pantalla la categoría y el jurado.
         echo $_GET[ 'cat' ]." - ".$_GET[ 'jur' ]."<br><br>";
@@ -130,7 +130,7 @@
         //echo "<br><br>";
         //echo "<a href='calificaciones.php?lista_categoria=".$_GET[ 'cat' ]."&lista_jurado=".$_GET[ 'jur' ]."'>Volver a la calificación</a>";
     }
-    echo "</div>";
+
     echo "</body>";
     echo "</html>";
     

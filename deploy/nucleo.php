@@ -1,6 +1,5 @@
 <?php
-    
-    header('Content-Type: text/html; charset=UTF-8');
+
     set_time_limit( 300 );  //Por Edwin Leon, Yimer Moreno y Anderson Rodriguez.
     
     function imprimir_titulo( $titulo )
@@ -10,7 +9,7 @@
     
     function colocar_logo()
     {
-        echo "<img width='100%' src='imagenes/logo_2017.png' class='pull-left'>";
+        echo "<img src='imagenes/logo.jpg'><br><br>";
     }
     
     function imprimir_menu()
@@ -18,8 +17,8 @@
         colocar_logo();
         
         echo "<div id='contenedor-todos-menus'>";
-        echo "<div class='contenedor-menu'><a href='desktop.php'> Inicio </a></div> ";
-        //echo "<div class='contenedor-menu'><a href='totales.php'> Totales </a></div> ";
+        echo "<div class='contenedor-menu'><a href='index.php'> Inicio </a></div> ";
+        echo "<div class='contenedor-menu'><a href='totales.php'> Totales </a></div> ";
         echo "</div>";
         echo "<br><br>";
     }
@@ -186,51 +185,7 @@
         
         return $respuesta."";
     }
-
-    // Esta función fue creada con el fin de no modificar la anterior 
-    // Va a mostrar un select con las regionales.
-    function traer_lista_regionales( $ruta = null )
-    {
-        include( $ruta."config.php" );
-        
-        $respuesta = "";
-        
-        //Se actualizan todos los valores a cero cuando el campo tiene un valor null.
-        // $sql = " UPDATE tb_calificaciones SET puntuacion = 0 WHERE puntuacion is null; ";
-        // $conexion = mysqli_connect( $servidor, $usuario, $clave, $bd );
-        // $resultado = $conexion->query( $sql );
-        
-        
-        //A partir de aquí se colocarán las listas que un jurado podrá elegir para calificar.
-        $sql = "SELECT * FROM tb_regiones ORDER BY nombre_region ";
-        
-        //Conectamos con la base de datos.
-        $conexion = mysqli_connect( $servidor, $usuario, $clave, $bd );
-        $resultado = $conexion->query( $sql );
-        
-        //echo $sql;
-        
-        if( mysqli_num_rows( $resultado ) > 0 )
-        {
-            //El inicio y fin de la lista se coloca fuera del ciclo while para que abarque todo lo que arroje la consulta.
-            //echo "<li>Seleccione jurado por favor</li>";
-            $respuesta .= "<SELECT name='lista_jurado' id='select' >";
-            $respuesta .= "<option value='-1'>Seleccione regional</option>";                 
-            
-            while( $fila = mysqli_fetch_assoc( $resultado ) )
-            {                        
-                $respuesta .= "<option value='".$fila[ 'nombre_region' ]."'>".$fila[ 'nombre_region' ]."</option>";                 
-            }
-
-            //El inicio y fin de la lista se coloca fuera del ciclo while para que abarque todo lo que arroje la consulta.                    
-            $respuesta .= "/<SELECT>"; 
-        }
-        
-        return $respuesta."";
-    }
-
-
-
+    
     function traer_regionales()
     {
         include( "config.php" );
@@ -256,40 +211,38 @@
         
         return $respuesta."";
     }
-
-    // Esta función fue creada con el fin de no modificar la anterior 
-    // Va a mostrar un select con las categorias
-    function traer_lista_categorias( $ruta = null )
+    
+    /**
+     * Esta función se encarga de traer el nombre de la región, teniendo en cuenta el agrupador.
+     * Si ese nombre no está en la base de datos, devuelve la misma cadena de parámetro usada.
+     * @param       texto           Una cadena que representa el agrupador para sumar los puntajes de esa regional.
+     * @return      texto           El nombre de la regional con ese agrupador.
+     */
+    function traer_regional( $agrupador_suma )
     {
-        include( $ruta."config.php" );
+        include( "config.php" );
         
-        $respuesta = "";
+        $respuesta = "".$agrupador_suma;
+        $agrupador_suma = TRIM( $agrupador_suma );
         
-        $sql = "SELECT * FROM tb_categorias ORDER BY categoria ";
-                            
-        //Conectamos con la base de datos.
+        $sql  = " SELECT nombre_region FROM tb_regiones WHERE agrupador_suma = '$agrupador_suma'";
+        
+        //echo $sql."<br>";
+        
         $conexion = mysqli_connect( $servidor, $usuario, $clave, $bd );
         $resultado = $conexion->query( $sql );
-        
-        //echo $sql;
-        
+
         if( mysqli_num_rows( $resultado ) > 0 )
         {
-            //El inicio y fin de la lista se coloca fuera del ciclo while para que abarque todo lo que arroje la consulta.
-            $respuesta .= "<SELECT name='lista_categoria' id='select1'>";
-            $respuesta .= "<option value='-1'>Seleccione categoria</option>";                 
-            
             while( $fila = mysqli_fetch_assoc( $resultado ) )
-            {                        
-                $respuesta .= "<option value='".utf8_encode($fila[ 'categoria' ])."'>".utf8_encode( $fila[ 'categoria' ] )."</option>";                 
+            {   
+                $respuesta = TRIM( $fila[ 'nombre_region' ] ); 
             }
-
-            //El inicio y fin de la lista se coloca fuera del ciclo while para que abarque todo lo que arroje la consulta.                    
-            $respuesta .= "/<SELECT>"; 
         }
         
         return $respuesta."";
     }
+    
     function guardar_foto( $nombre_region, $categoria, $url )
     {
         include( "config.php" );
@@ -304,14 +257,14 @@
         $conexion = mysqli_connect( $servidor, $usuario, $clave, $bd );
         $resultado = $conexion->query( $sql );
 
-        if( $conexion->affected_rows > 0 ){ $error = "1"; }
-        else{ $error = "0"; }
+        if( $conexion->affected_rows > 0 ){ $error = "1; La información de la fotografía se ha guardado correctamente."; }
+        else{ $error = "1; Error: No se ha guardado la información de la foto. Es probable que esa regional no participe en esa categoría, que no haya escogido de las listas o algún otro error desconocido."; }
         
         //return $sql."";
-        return $error;
+        return $error."";
     }
     
-    function traer_imagenes( $categoria , $nombre_region)
+    function traer_imagenes( $categoria )
     {
         include( "config.php" );
         
@@ -320,7 +273,6 @@
         
         $sql  = " SELECT * FROM tb_imagenes ";
         $sql .= " WHERE categoria = '".TRIM( $categoria )."' ";
-        $sql .= " AND nombre_region = '". $nombre_region ."' ";
         $sql .= " AND nombre_region in ( SELECT DISTINCT nombre_region FROM tb_calificaciones WHERE categoria = '".TRIM( $categoria )."' )";
         $sql .= " ORDER BY nombre_region, categoria ";
         
@@ -336,11 +288,10 @@
                 if( strpos( $cambio1, $fila[ 'nombre_region' ]."" ) === false )
                 {
                     $cambio1 .= $fila[ 'nombre_region' ];
-                    //$respuesta .= "<br><br><br>".$fila[ 'nombre_region' ]."<br>";    
+                    $respuesta .= "<br><br><br>".$fila[ 'nombre_region' ]."<br>";    
                 }               
-                $respuesta .= "<div class='col-xs-6 col-md-6'> ";
-                    $respuesta .= "<img id='img_id' class='img-responsive' src='".TRIM( $fila[ 'url' ] )."'>";
-                $respuesta .= "</div>";
+                
+                $respuesta .= "<img src='".TRIM( $fila[ 'url' ] )."'>";
                 //$respuesta .= "<br>".TRIM( $fila[ 'url' ] ); 
             }
             
@@ -356,17 +307,10 @@
     {
         $respuesta = "";
         
-        $respuesta .= "<br><footer> <center>";
-
-        $respuesta .= "<b>CDATTG</b> - Centro de Desarrollo, agroindustrial, turistico y tecnol&oacute;gico del Guaviare <br>";
-        $respuesta .= "San José del Guaviare - Guaviare <br>";
-        $respuesta .= "Tecnólogo En Análisis y Desarrollo de Sistemas de Indormación <br>";
-        $respuesta .= "2017 </footer> <br>";
-
-        $respuesta .= "<br> </center>";
-        //$respuesta .= " <img src='imagenes/9.png'> ";
+        $respuesta .= "<br><br>";
+        $respuesta .= " <img src='imagenes/9.png'> ";
         
-        return utf8_encode($respuesta);
+        return $respuesta;
     }
 
 ?>
